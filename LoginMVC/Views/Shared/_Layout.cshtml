@@ -36,8 +36,8 @@
                             </span>
                             <form asp-controller="Access" asp-action="Logout" method="post" class="d-inline">
                                 @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-outline-light btn-sm">
-                                    <i class="bi bi-box-arrow-right me-1"></i> Salir
+                                <button type="submit" class="btn btn-danger btn-sm shadow-sm px-3 fw-semibold">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
                                 </button>
                             </form>
                         }

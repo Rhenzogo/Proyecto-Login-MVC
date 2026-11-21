@@ -71,7 +71,7 @@ public class AccessController : Controller
         }
         else
         {
-            // Migración automática si estaba en texto plano
+            // Migración automática del en texto plano
             if (usuario.Contrasena == password)
             {
                 passwordValida = true;
@@ -117,7 +117,7 @@ public class AccessController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    // HTTP POST: /Access/Logout
+    // Acción Logout: Destruir cookies de sesión activos y redirigir al Login
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
@@ -126,9 +126,8 @@ public class AccessController : Controller
         return RedirectToAction("Login", "Access");
     }
 
-    // HTTP GET: /Access/Logout (por si se navega directamente vía GET)
     [HttpGet]
-    public async Task<IActionResult> Exit()
+    public async Task<IActionResult> Logout(string? redirect = null)
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Login", "Access");

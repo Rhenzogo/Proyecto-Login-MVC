@@ -1,22 +1,41 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using LoginMVC.Models;
 
 namespace LoginMVC.Controllers;
 
 [Authorize]
 public class DashboardController : Controller
 {
-    // GET: /Dashboard/Index
-    public IActionResult Index()
-    {
-        // Obtenemos los datos del usuario autenticado a través de sus Claims
-        var nombreUsuario = User.Identity?.Name ?? "Estudiante";
-        var correoUsuario = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
-        var nickname = User.Claims.FirstOrDefault(c => c.Type == "Nickname")?.Value ?? "";
+    private readonly LoginContext _context;
 
-        ViewBag.NombreCompleto = nombreUsuario;
-        ViewBag.Correo = correoUsuario;
-        ViewBag.Nickname = nickname;
+    public DashboardController(LoginContext context)
+    {
+        _context = context;
+    }
+
+    // GET: /Dashboard/Index
+    public async Task<IActionResult> Index()
+    {
+        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var usuarioId))
+        {
+            return Forbid();
+        }
+
+        var usuario = await _context.Usuarios
+            .AsNoTracking()
+            .SingleOrDefaultAsync(u => u.IdUsuario == usuarioId);
+
+        if (usuario == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.NombreCompleto = usuario.Nombre;
+        ViewBag.Correo = usuario.Correo;
+        ViewBag.Nickname = usuario.Nickname;
 
         return View();
     }
