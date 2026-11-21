@@ -1,7 +1,7 @@
 -- ==========================================================
 -- PROYECTO PRÁCTICO: SISTEMA DE AUTENTICACIÓN Y CONTROL DE ACCESO (LOGIN MVC)
 -- Base de Datos: DB_LOGIN_PROYECT
--- Servidor: DESKTOP-ODBD2U2\SQLEXPRESS
+-- Servidor: localhost\SQLEXPRESS (o .\SQLEXPRESS)
 -- ==========================================================
 
 -- 1. Creación de la Base de Datos
@@ -29,7 +29,7 @@ GO
 
 -- 3. Inserción de Registros Actuales / Pruebas / Integrantes
 -- Usuario: admin
-IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE Nickname = 'admin')
+IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE Nickname = 'admin' OR Correo = 'admin@upana.edu.gt')
 BEGIN
     INSERT INTO Usuarios (Nombre, Nickname, Correo, Contrasena)
     VALUES ('Administrador del Sistema', 'admin', 'admin@upana.edu.gt', 'admin123');
